@@ -1,0 +1,82 @@
+{% extends "Navbar/navbar.html" %}
+{% block content %}
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+</style>
+    <div class="container mt-5 mb-2 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 mb-2">
+                <div class="card pb-3" style="background-color: #FFFFFF;">
+                    <div class="card-body text-center pb-3">
+                        <img src="{{user_profile.profile_img.url}}" width="200" height="200" class="rounded-circle mb-3" alt="User Image" width="200">
+                        <h4 class="card-title text-dark fw-bolder">@{{user.username}} <br>{{user.username}}</h4>
+                        <p class="text-start text-dark-emphasis"><i>{{user_profile.bio}}</i></p>
+                        <p class="card-text text-primary-emphasis fw-bolder">Student</p>
+                    </div>
+                    <center><a class="btn btn-outline-info fw-bolder" href="">Edit Profile</a></center>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card text-dark" style="font-size: 0.9rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center fw-bolder" style="font-size: 1.5em; font-family: Arial, Helvetica, sans-serif;">User Information</h5><hr>
+                        <div class="row mb-2 py-2" style="background-color: #d5f7de;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Username</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{user.username}}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #e4e4e4;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Email</label>
+                            <div class="col-sm-7">
+                                <input type="email" class="form-control" value="{{user.email}}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #d5f7de;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Date of Birth</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{user_profile.date_of_birth}}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #e4e4e4;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Country</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{ user_profile.country }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #d5f7de;">
+                            <label class="col-sm-3 col-form-label fw-bolder">City</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{ user_profile.city }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #e4e4e4;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Phone Number</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{ user_profile.phone_number }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #d5f7de;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Level of Study</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" value="{{ user_profile.level_of_education }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-2 py-2" style="background-color: #e4e4e4;">
+                            <label class="col-sm-3 col-form-label fw-bolder">Courses Enrolled</label>
+                            <div class="col-sm-7">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Course 1</li>
+                                    <li class="list-group-item">Course 2</li>
+                                    <li class="list-group-item">Course 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

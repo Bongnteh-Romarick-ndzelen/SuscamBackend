@@ -1,0 +1,75 @@
+{% extends "Navbar/navbar.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-8 p-4 rounded mt-5">
+            <center>
+                <h5 class=" m-3" style="border-bottom: solid 2px blue">Search Result for <em><strong>{{ query }}.</strong> There are about {{total_found}} items found!</em></h5>
+            </center>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <center><h5>All Courses found</h5></center>
+    <div class="row justify-content-center">
+        {% for item in search_results %}
+        <div class="col-md-4">
+
+            {% if item.model_type == "Course" %}
+            <div class="box mb-3 p-3 rounded" style="background-color: #eaffff;">
+                <center>
+                    <img style="height: 200px; width: auto;"
+                        src="{{item.course_img.url}}"
+                        class="img-fluid product-img"
+                        alt="product-image"
+                    />
+                </center>
+                <h5 class="text-center fw-bold mt-2">{{item.course_name}}</h5>
+                <p style="color: #004800; font-size: .8em;">{{item.description|slice:":80"}}.... <br><em>Posted <strong>{{item.created | timesince}}</strong> ago</em></p>
+                <center>
+                    <p>
+                        <strong class="btn btn-outline-success fw-bold px-3" style="font-size: 1em; padding: 3px;"><strike>{{item.old_price}} &dollar;</strike></strong>
+                        <strong class="btn btn-outline-success fw-bold px-3" style="font-size: 1em;  padding: 3px;">{{item.price}} &dollar;</strong><br>
+                        <center><a href="{% url 'course' item.course_id %}" class="btn btn-outline-success fw-bold">view and Enroll</a></center>
+                    </p>
+                </center>
+            </div>
+            {% elif item.model_type == "Products" %}
+            <div class="box mb-3 p-3 rounded" style="background-color: #eaffff;">
+                <center>
+                    <img style="height: 200px; width: auto;"
+                        src="{{item.image.url}}"
+                        class="img-fluid product-img"
+                        alt="product-image"
+                    />
+                </center>
+                <h5 class="text-center fw-bold mt-2">{{item.name}}</h5>
+                <p style="color: #004800; font-size: .8em;">{{item.product_des|slice:":80"}}.... <br><em>Posted <strong>{{item.created | timesince}}</strong> ago</em></p>
+                <center>
+                    <p>
+                        <strong class="btn btn-outline-success fw-bold px-3" style="font-size: 1em; padding: 3px;"><strike>{{item.old_price}} &dollar;</strike></strong>
+                        <strong class="btn btn-outline-success fw-bold px-3" style="font-size: 1em;  padding: 3px;">{{item.price}} &dollar;</strong><br>
+                        <center><a href="{% url 'product' item.product_id %}" class="btn btn-outline-success fw-bold">view and Buy</a></center>
+                    </p>
+                </center>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% endfor %}
+    </div>
+
+    <!--checking if model is Product-->
+    <center><h5>All Products found</h5></center>
+    <div class="row justify-content-center">
+        {% for i in search_results %}
+        <div class="col-md-4">
+
+            {% if i.model_type == "Products" %}
+            
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

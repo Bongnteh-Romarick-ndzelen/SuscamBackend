@@ -1,0 +1,158 @@
+{% extends "Navbar/navbar.html" %}
+
+{% load static %}
+{% block content %}
+    <style>
+        .scrolling-wrapper {
+            overflow-x: auto;
+            display: flex;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .card {
+            flex: 0 0 auto;
+            width: 300px;
+            margin-right: 15px;
+            margin-bottom: 20px;
+            margin-left: 15px;
+        }
+        .social-icons {
+            margin-top: 10px;
+        }
+        .social-icons a {
+            margin-right: 10px;
+            color: #555;
+            font-size: 1.4rem;
+        }
+        .social-icons .fa-facebook-f {
+            color: #fdfffd;
+            background-color: #3915D8;
+            padding: 0.1rem .3rem;
+            border-radius: .1em;
+        }
+        .social-icons .fa-linkedin-in {
+            color: white;
+            background-color: blue;
+            padding: 0.1rem .3rem;
+        }
+        .social-icons .fa-twitter {
+            color: #fff;
+            background-color: #1A0BE7;
+            padding: 0.1rem .3rem;
+            border-radius: .1em;
+        }
+        .social-icons .fa-instagram {
+            color: #fdfffd;
+            background-color: #D815C5;
+            padding: 0.1rem .3rem;
+            border-radius: .1em;
+        }
+    </style>
+    <main id="main">
+        <div class="jumbotron text-center mt-5 pt-5">
+            <h1 class="display-5" style="color: #064303;">About Us</h1>
+            <hr class="my-2">
+            <p class="py-5 px-2 shadow text-center" style="background-color: #0a2609; color: #D1E0CD;">Welcome to CyberSecure, a cutting-edge cybersecurity startup dedicated to safeguarding your digital world. <br>
+                Learn more about our mission, vision, and the amazing team behind our success.
+                <center><a class="py-2 px-5 text-white border my-3" style="background-color: #23025C;" href="#team">Meet the Team</a></center>
+
+            </p>
+        </div>
+        <section id="about" class="about bg-dark">
+            <div class="container" data-aos="fade-up">
+            <div class="row gx-0">
+                <div
+                class="col-lg-6 d-flex flex-column justify-content-center rounded"
+                data-aos="fade-up"
+                data-aos-delay="200"
+                >
+                <div class="content p-2 rounded bg-light-subtle">
+                    <h3>Who We Are</h3>
+                    <h2>
+                    Protecting Your Digital World And providing Online Courses
+                    </h2>
+                    <p>
+                    Safeguarding businesses and individuals from cyber threats
+                    with reliable solutions, advance Products and comprehensive
+                    education by providing online courses.
+                    </p>
+                    <div class="text-center text-lg-start">
+
+                    </div>
+                </div>
+                </div>
+
+                <div
+                class="col-lg-6 d-flex align-items-center"
+                data-aos="zoom-out"
+                data-aos-delay="200"
+                >
+                <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid rounded" alt="" />
+                </div>
+            </div>
+            </div>
+        </section>
+        <!-- End About Section -->
+    </main>
+    <div class="container mt-5">
+
+        <div class="row mt-5 bg-dark text-white py-3 px-2">
+            <div class="col-md-6 shadow px-2">
+                <h2 class="text-center" style="color: #0CEA08;">Our Mission</h2> <hr>
+                <p>
+                    Our mission is to protect businesses and individuals from cyber threats through innovative solutions and comprehensive security measures. <br>
+            In addition to our advanced cybersecurity services, we offer an extensive online course designed to equip you with the knowledge and skills needed to defend against cyber attacks. 
+            Our expert-led curriculum covers essential topics like network security, ethical hacking, and data protection. Join us at CyberSecure and become part of the future of digital security, 
+            ensuring a safer online environment for all. <br>
+                </p>
+            </div>
+            <div class="col-md-6 shadow px-2">
+                <h2 class="text-center" style="color: #0CEA08;">Our Vision</h2><hr>
+                <p>
+                    Our vision is to be a leading provider of educational resources, fostering a community of lifelong learners and thinkers. We aim to inspire and support our users in their pursuit of knowledge.
+                </p>
+            </div>
+        </div>
+
+        <!-- ======= Team Section ======= -->
+        <div class="mt-5 my-2 py-3 bg-dark rounded mx-0">
+            <h2 class="text-center py-3 border-bottom mx-2" id="team" style="color: #0CEA08;">Our Team</h2><hr>
+            <div class="scrolling-wrapper my-2">
+
+                {% for member in team %}
+                <div class="card">
+                    <center><img src="{{ member.member_img.url }}" class="card-img-top" style="width: 200px; height: 200px;" alt="{{member.name}}"></center>
+                    <div class="card-body shadow">
+                        <h5 class="card-title text-center fw-bold" style="color: #0a2609;">{{ member.name }} <br><span class="fw-bold fs-6"><i>{{ member.position }}</i></span></h5>
+                        <center></center>
+                        <p class="card-text"><i>{{ member.member_description }}</i></p>
+                        <center>
+                            <div class="social-icons justify-content-center">
+                                <a href="{{ member.facebook_url }}" class="fab fa-facebook-f"></a>
+                                <a href="{{ member.twitter_url }}" class="fab fa-twitter"></a>
+                                <a href="{{ member.histogram_url }}" class="fab fa-instagram"></a>
+                                <a href="{{ member.linkedin_url }}" class="fab fa-linkedin-in"></a>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+                {% endfor %}
+                
+
+                <!--See more members section-->
+                <div class="justify-content-center align-content-center p-4">
+                    <div class="justify-content-center align-content-center bg-dark" style="border: none;">
+                        <center><p class="justify-content-center align-content-center" style="width: 200px; height: 200px;"><i><a class="btn btn-success" href="">See more &rightarrow;</a></i></p></center>
+                    </div>
+                </div>
+                <!-- Add more cards as needed -->
+            </div>
+        </div>
+        <!-- End Team Section -->
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <center><p class="fw-bold">If you have any questions or inquiries, feel free to <a href="{% url 'contact' %}">contact us</a>.</p></center>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

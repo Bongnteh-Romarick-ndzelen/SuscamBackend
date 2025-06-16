@@ -1,0 +1,94 @@
+{% extends "Navbar/navbar.html" %}
+{% load static %}
+<div>
+    {% block content %}
+    <div id="blog" class="blog">
+        <div class="container mt-5" data-aos="fade-up">
+
+            <div class="row mt-5">
+
+            <div class="col-lg-8 entries rounded">
+
+                <article class="entry">
+
+                    <center>
+                        <div class="entry-img rounded">
+                            <img style="width:80%; height: auto;"  src="{{course.course_img.url}}" alt="" class="img-fluid">
+                        </div>
+                        <h2 class="entry-title">
+                            {{ course.course_name}}
+                        </h2>
+                    </center>
+                    <div class="entry-content">
+                        <p>
+                        {{ course.description }}
+                        </p>
+                    </div>
+                    <center>
+                        <div class="d-flex mx-4 text-center justify-content-center mb-4" style="font-size: 1.2rem;">
+                            <div class="read-more mx-3">
+                                <button><strong><strike>{{course.old_price}} </strike>$</strong></button>
+                            </div>
+                            <div class="read-more mx-3">
+                                <button><Strong>{{course.price}} $</Strong></button>
+                            </div>
+                        </div>
+                    </center>
+                    <center>
+                        <div class="read-more mx-3 btn btn-primary">
+                            <a href="" class="text-white">Enroll now</a>
+                        </div>
+                    </center>
+
+                </article><!-- End blog entry -->
+
+            </div><!-- End blog entries list -->
+
+            <div class="col-lg-4">
+
+                <div class="sidebar">
+
+                <!--h3 class="sidebar-title">Categories</!--h3>
+                <div class="sidebar-item categories">
+                    <ul>
+                    <li><a href="#">General <span>(25)</span></a></li>
+                    <li><a href="#">Lifestyle <span>(12)</span></a></li>
+                    <li><a href="#">Travel <span>(5)</span></a></li>
+                    <li><a href="#">Design <span>(22)</span></a></li>
+                    <li><a href="#">Creative <span>(8)</span></a></li>
+                    <li><a href="#">Educaion <span>(14)</span></a></li>
+                    </ul>
+                </div><!-- End sidebar categories-->
+
+                <h3 class="sidebar-title">Most Recent Courses</h3>
+                <div class="sidebar-item recent-posts">
+                    
+                    {% for cours in course2 %}
+                    <div class="post-item clearfix">
+                        <img src="{{ cours.course_img.url }}" alt="{{cours.course_name}}">
+                        <h4><a href="{% url 'course' cours.course_id %}">{{cours.course_name}}</a></h4>
+                        <time class="text-dark" datetime="2020-01-01"><strong>{{cours.created|timesince}} ago</strong></time>
+                    </div>
+                    {% endfor %}
+                    <center><a class="mt-4 btn btn-outline-primary" href="{% url 'courses' %}">See More</a></center>
+                </div><!-- End sidebar recent posts-->
+
+                <h3 class="sidebar-title">Products</h3>
+                <div class="sidebar-item tags">
+                    <ul>
+                    {% for product in products %}
+                        <li><a href="{% url 'product' product.product_id %}">{{product.name}}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div><!-- End sidebar tags-->
+
+                </div><!-- End sidebar -->
+
+            </div><!-- End blog sidebar -->
+
+            </div>
+
+      </div>
+    </div>
+    {% endblock content %}
+</div>

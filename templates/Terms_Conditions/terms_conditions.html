@@ -1,0 +1,48 @@
+
+{% extends 'Navbar/navbar.html' %}
+{% load static %}
+{% block content %}
+
+<div class="mx-auto my-5 px-3 rounded" style="background-color: #242426; border:13px solid #800080; ">
+    <div class="row my-5 pt-3 shadow px-2 text-black">
+        <ol class="p-3 my-2">
+            {% for term in terms_condition %}
+            <li class="p-3 shadow my-2 rounded text-white" style="background-color: #0b0b0b;">{{term.text}}</li><hr>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-5">
+            <div class="card-body bg-success text-white">
+                <h5 class="card-title fw-bold" style="font-size: 1.5em;">Course Title</h5>
+                <p class="fw-bold" style="color:#FFFFFF; font-size: 1.em;"><strong>Posted 3 weeks Ago</strong></p>
+                <p class="card-text" style="font-size:small; font-family:Verdana, Geneva, Tahoma, sans-serif; color: #e9e9e9;">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam, necessitatibus Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil asperiores 
+                </p>
+                <p class="card-text"> <strong>Duration: 6 Weeks</strong> </p>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card-body">
+                <!--h5 class="card-title fw-bolder">
+                    Course Details
+                </h5-->
+                <p class="card-img"> 
+                    <img width="100%" style="height: 200px;" class="rounded" src="{% static 'assets/img/blog/blog-3.jpg' %}" alt="">
+                    <center>
+                        <span>
+                            <span class="btn btn-success fw-bold mr-4" style="font-size: 1em; padding: 4px; color:#FFFFFF;"><strike>2000 &dollar;</strike></span>
+                            <span class="btn btn-success fw-bold" style="font-size: 1em;  padding: 4px; color:#FFFFFF;">750 &dollar;</span>
+                        </span>
+                    </center>
+                </p>
+                <center><a href="" style="font-size: 13px;" class="card-text btn btn-primary">View and Enroll</a></center>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

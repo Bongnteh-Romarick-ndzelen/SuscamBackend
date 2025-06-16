@@ -1,0 +1,190 @@
+
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+        <title>Suscam</title>
+        <meta content="" name="description" />
+        <meta content="" name="keywords" />
+
+        <!-- Favicons -->
+        <link href="{% static 'assets/img/favicon.png' %}" rel="icon" />
+        <link
+        href="{% static 'assets/img/apple-touch-icon.png' %}"
+        rel="apple-touch-icon"
+        />
+
+        <!-- Google Fonts -->
+        <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet"
+        />
+
+        <!-- Vendor CSS Files -->
+        <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
+        <link
+        href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}"
+        rel="stylesheet"
+        />
+        <link
+        href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}"
+        rel="stylesheet"
+        />
+        <link
+        href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}"
+        rel="stylesheet"
+        />
+        <link
+        href="{% static 'assets/vendor/remixicon/remixicon.css' %}"
+        rel="stylesheet"
+        />
+        <link
+        href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}"
+        rel="stylesheet"
+        />
+
+        <!-- Template Main CSS File -->
+        <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
+        <style>
+            body {
+                background-color: #ECF2F4;
+            }
+        </style>
+
+        <!--  =======================================================
+        * Template Name: FlexStart
+        * Updated: Sep 18 2023 with Bootstrap v5.3.2
+        * Template URL: https://bootstrapmade.com/flexstart-bootstrap-startup-template/
+        * Author: BootstrapMade.com
+        * License: https://bootstrapmade.com/license/
+        ========================================================  -->
+    </head>
+    <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top">
+        <div
+            class="container-fluid container-xl d-flex align-items-center justify-content-between"
+        >
+            <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+            <!--img src="{% static 'assets/img/logo.png' %}" alt="" /-->
+            <span>SUSCAM</span>
+            </a>
+
+
+            <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'about' %}">About Us</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'products' %}">Products</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'courses' %}">Courses</a></li>
+                <li class="dropdown megamenu">
+                    <a href="#"
+                        ><span>Services</span> <i class="bi bi-chevron-down"></i
+                    ></a>
+                    <ul>
+                        <li>
+                        <a href="#">Column 1 link 1</a>
+                        <a href="#">Column 1 link 2</a>
+                        <a href="#">Column 1 link 3</a>
+                        </li>
+                        <li>
+                        <a href="#">Column 2 link 1</a>
+                        <a href="#">Column 2 link 2</a>
+                        <a href="#">Column 3 link 3</a>
+                        </li>
+                        <li>
+                        <a href="#">Column 3 link 1</a>
+                        <a href="#">Column 3 link 2</a>
+                        <a href="#">Column 3 link 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" href="{% url 'contact' %}">Contact Us</a></li>
+                <!--li><a href="blog.html">Blog</a></!--li> < -->
+                {% if request.user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="p-0"><img class="mx-3" src="{{ user_profile.profile_img.url }}" style="width: auto; height: 45px; border-radius: 50%;" alt=""><span>@{{ user.username }}</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="{% url 'profile' user.id %}">Profile</a></li>
+                        <li><a href="{% url 'logout' %}">Log Out</a></li>
+                        <!--li><a href="#">Drop Down 4</a></li-->
+                    </ul>
+                </li>
+                {% else %}
+                <li class="">
+                <a href="{% url 'register' %}"><span>Sign Up</span><i class=""></i></a>
+                </li>
+                {% endif %}
+
+                <!--li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            <li--<a class="getstarted scrollto" href="#about">Get Started</a></li-->
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav>
+            <!-- .navbar -->
+        </div>
+        </header>
+        <!-- End Header -->
+
+
+    <body>
+        <div class="container mt-5">
+            <div class="row justify-content-center my-5 mx-3">
+                <div class="col-md-9 py-3 mt-5 text-center">
+                    <!--To Display error messages-->
+                    {% if messages %}
+                    <div class="alert alert-danger fade show" role="alert">
+                        {% for message in messages %}
+                        <p {% if message.tags %} class="rounded" style="color:#0f8686; font-weight:bold; font-size:1.2rem;"{% endif %}><i>{{ message }}</i></p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 py-3 px-4 shadow rounded" style="background-color: #FFFFFF; border: 1px solid #CEE4D9;">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <h4 class="text-center text-black ">Login</h4> <hr class="bg-black">
+                        <div class="form-group my-2">
+                            <label for="my-input" class="text-start text-black">Username</label>
+                            <input id="username" class="form-control" type="text" name="username" placeholder="Enter Your Name..." required>
+                        </div>
+
+                        <div class="form-group my-2">
+                            <label for="password" class="text-start text-black">Password</label>
+                            <input id="password" class="form-control" type="password" name="password" placeholder="Enter Password..." required>
+                        </div>
+
+                        <!--Forgot Password-->
+                        <div class="">
+                            <a class="" style="font-size: 0.9rem; text-decoration: none; color: #646C04;" href=""><strong>Forgot password</strong></a>
+                        </div>
+
+                        <div class="form-group my-2">
+                            <input class="form-control mt-3 btn btn-success" type="submit" value="Login">
+                        </div>
+
+                        <center>
+                            <p style="font-size: .8em; font-family: Arial, Helvetica, sans-serif; margin-top: 5px; color: #091e22;">
+                                <strong class="text-black">Don't yet have an account, sign up </strong><a class="text-danger mx-2" style="text-decoration: none; font-size: 1.20em; color: #FDFDFD; font-weight: bolder;" href="{% url 'register' %}">Here</a>
+                            </p>
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vendor JS Files -->
+        <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+        <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+        <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+        <!-- Template Main JS File -->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+    </body>
+    </html>

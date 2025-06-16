@@ -1,0 +1,67 @@
+{% extends "Navbar/navbar.html" %}
+{% load static %}
+<div>
+    {% block content %}
+    <style>
+        body {
+            background-color: #0F0F0F;
+        }
+    </style>
+    <div class="mt-5 container">
+        <div class="row mt-5 justify-content-center">
+        <center><h5 class="mt-5 text-light fw-bold" style="border-bottom: solid 1px #05694b;"><em>There are {{total}} Courses available. Check below!</em></h5></center>
+
+            {% for course in course_list %}
+            <div class="card mb-3 mx-2" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-5">
+                        <div class="card-body bg-success text-white">
+                            <h5 class="card-title fw-bold" style="font-size: 1.5em;">{{course.course_name}}</h5>
+                            <p class="fw-bold" style="color:#FFFFFF; font-size: 1.em;"><strong>Posted {{course.created | timesince}} Ago</strong></p>
+                            <p class="card-text" style="font-size:small; font-family:Verdana, Geneva, Tahoma, sans-serif; color: #e9e9e9;">
+                                {{ course.description|slice:":80" }}...
+                            </p>
+                            <p class="card-text"> <strong>Duration: 6 Weeks</strong> </p>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <!--h5 class="card-title fw-bolder">
+                                Course Details
+                            </h5-->
+                            <p class="card-img"> 
+                                <img width="100%" style="height: 200px; border-radius: 10px;" class="" src="{{ course.course_img.url }}" alt="{{course.course_name}}">
+                                <center>
+                                    <span>
+                                        <span class="btn btn-success fw-bold mr-4" style="font-size: 1em; padding: 4px; color:#FFFFFF;"><strike> &dollar;{{course.old_price}}</strike></span>
+                                        <span class="btn btn-success fw-bold" style="font-size: 1em;  padding: 4px; color:#FFFFFF;">{{course.price}} &dollar;</span>
+                                    </span>
+                                </center>
+                            </p>
+                            <center><a href="{% url 'course' course.course_id %}" style="font-size: 13px;" class="card-text btn btn-primary">View and Enroll</a></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!--Paginator-->
+        <div class="row justify-content-center text-center products mb-3">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo;First</a>
+                <a href="?page={{ page_obj.previous_page_number}}">previous</a>
+                {% endif %}
+
+                <span class="current_page">Page{{page_obj.number }}</span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number}}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last&raquo;</a>
+                {% endif %}
+
+            </span>
+        </div>
+    </div>
+    {% endblock content %}
+</div>
