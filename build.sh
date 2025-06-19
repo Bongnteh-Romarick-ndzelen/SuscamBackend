@@ -1,7 +1,8 @@
 
 set -o errexit
-
-pip install -r requirements.txt
+# Random string forces fresh download
+CACHE_BUST=$(date +%s)
+pip install --no-cache-dir -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput

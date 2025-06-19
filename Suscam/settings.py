@@ -1,14 +1,9 @@
 import os
 from pathlib import Path
 import dj_database_url
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # ========================
 # SECURITY CONFIGURATION
@@ -21,11 +16,11 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
+# Allow Railway and custom domains
+ALLOWED_HOSTS = ['*']  # Temporarily permissive for initial setup
+RAILWAY_STATIC_URL = os.environ.get('RAILWAY_STATIC_URL')
+if RAILWAY_STATIC_URL:
+    ALLOWED_HOSTS.append(RAILWAY_STATIC_URL)
 
 # ========================
 # APPLICATION DEFINITION
@@ -88,20 +83,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Suscam.wsgi.application"
 
-
 # ========================
-# DATABASE CONFIGURATION
+# DATABASE CONFIGURATION (Railway PostgreSQL)
 # ========================
 
-# Database configuration - uses DATABASE_URL environment variable
+# Railway automatically provides PG* environment variables
+DATABASE_URL = os.environ.get('DATABASE_URL') or \
+    f"postgresql://{os.getenv('PGUSER')}:{os.getenv('PGPASSWORD')}@{os.getenv('PGHOST')}:{os.getenv('PGPORT')}/{os.getenv('PGDATABASE')}"
+
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',  # Fallback for local dev
-        conn_max_age=600,  # Connection persistence
-        conn_health_checks=True,  # Health checks (Render-specific)
+        default=DATABASE_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+        ssl_require=True
     )
 }
-
 
 # ========================
 # PASSWORD VALIDATION
@@ -122,7 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # ========================
 # INTERNATIONALIZATION
 # ========================
@@ -131,7 +127,6 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-
 
 # ========================
 # STATIC & MEDIA FILES
@@ -148,9 +143,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # WhiteNoise configuration for static files
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
 # ========================
-# SECURITY HEADERS
+# SECURITY HEADERS (Auto-enabled in production)
 # ========================
 
 if not DEBUG:
@@ -170,6 +164,5 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
 
-
 # Default primary key field type
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = "django.models.BigAutoField"
