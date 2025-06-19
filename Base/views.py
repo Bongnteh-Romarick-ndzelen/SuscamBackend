@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Courses, Products, Profile, Comments, Team
-from Security.models import  TermsModel
+from Security.models import TermsModel
 from django.db.models import Q
 from django.core.paginator import Paginator
 
@@ -15,25 +15,29 @@ user_profile = Profile.objects.all()
 
 # Create your views here.
 
-#homepage
+# homepage
 # @login_required(login_url='login')
+
+
 def index(request):
     products = Products.objects.all()[0:4]
     # user_profile = Profile.objects.get(user = request.user)
     # user_object = User.objects.get(username = request.user.username)
     # user_profile = Profile.objects.get(user=user_object)
     comments = Comments.objects.all()[0:4]
-    course  = Courses.objects.all()[0:4]
+    course = Courses.objects.all().only(
+        'course_name', 'description', 'course_img', 'course_id')
     form = CommentForm(request.POST or None)
     if form.is_valid():
 
         comment = form.save(commit=False)
         comment.user = request.user
-        #comment.post = post
+        # comment.post = post
         comment.save()
 
         form.save()
-        messages.success(request, "Your Comment has been created successfully!")
+        messages.success(
+            request, "Your Comment has been created successfully!")
 
         return redirect('index')
     # try:
@@ -53,7 +57,9 @@ def index(request):
     }
     return render(request, 'Home/index.html', context)
 
-#defining function to get a single course
+# defining function to get a single course
+
+
 @login_required(login_url='login')
 def course(request, pk):
     # try:
@@ -71,8 +77,9 @@ def course(request, pk):
         'products': products,
         'user_profile': user_profile,
         # 'user_profile': user_profile,
-        }
+    }
     return render(request, 'Courses/course.html', context)
+
 
 def search_results(request):
     # try:
@@ -81,9 +88,9 @@ def search_results(request):
     #     # Create a new Profile object if it doesn't exist
     #     user_profile = Profile.objects.create(user=request.user)
     query = request.GET.get('query')
-    referer = request.META.get('HTTP_REFERER') #get the referer url
-    
-    #check if query is empty or not
+    referer = request.META.get('HTTP_REFERER')  # get the referer url
+
+    # check if query is empty or not
     if not query:
         if referer:
             return redirect(referer)
@@ -96,8 +103,8 @@ def search_results(request):
         Q(price__icontains=query)
     )
     products = Products.objects.filter(name__icontains=query)
-    #print(query)
-    
+    # print(query)
+
     search_results = list(products) + list(courses)
     # total_found1 = courses.count()
     # total_found2 = courses.count()
@@ -110,6 +117,7 @@ def search_results(request):
     }
     return render(request, 'Search/search_result.html', context)
 
+
 def courses(request):
     # try:
     #     user_profile = Profile.objects.get(user=request.user)
@@ -121,29 +129,31 @@ def courses(request):
     course_list = Courses.objects.all()[::-1]
 
     total = Courses.objects.all().count()
-    
-    #adding paginator to contains 8 items per page
+
+    # adding paginator to contains 8 items per page
     paginator = Paginator(course_list, 4)
-    
-    #get current page number from the request GET parameters
+
+    # get current page number from the request GET parameters
     page_number = request.GET.get('page')
-    
-    #get the page object from the current page
+
+    # get the page object from the current page
     page_obj = paginator.get_page(page_number)
-    
-    #get slice list of item for the current page
+
+    # get slice list of item for the current page
     slice_courses = page_obj.object_list
     context = {
         'course_list': slice_courses,
         'total': total,
-        'page_obj' : page_obj,
+        'page_obj': page_obj,
 
-        'user_profile' : user_profile,
+        'user_profile': user_profile,
         # 'user_profile' : user_profile,
     }
     return render(request, 'Courses/courses.html', context)
 
-#products Page List
+# products Page List
+
+
 def products(request):
     # try:
     #     user_profile = Profile.objects.get(user=request.user)
@@ -155,30 +165,32 @@ def products(request):
     products = Products.objects.all()
 
     total = Products.objects.all().count()
-    #adding paginator to contains 8 items per page
+    # adding paginator to contains 8 items per page
     paginator = Paginator(products, 4)
-    
-    #get current page number from the request GET parameters
+
+    # get current page number from the request GET parameters
     page_number = request.GET.get('page')
-    
-    #get the page object from the current page
+
+    # get the page object from the current page
     page_obj = paginator.get_page(page_number)
-    
-    #get slice list of item for the current page
+
+    # get slice list of item for the current page
     slice_products = page_obj.object_list
     context = {
         'products': slice_products,
         'total': total,
-        'page_obj' : page_obj,
+        'page_obj': page_obj,
 
-        'user_profile' : user_profile,
+        'user_profile': user_profile,
 
         # 'user_profile' : user_profile,
 
     }
     return render(request, 'Products/products.html', context)
 
-#function to get a Single Product
+# function to get a Single Product
+
+
 @login_required(login_url='login')
 def product(request, pk):
     # try:
@@ -199,8 +211,9 @@ def product(request, pk):
 
         # 'user_profile': user_profile,
 
-        }
+    }
     return render(request, 'Products/product.html', context)
+
 
 def about(request):
     team = Team.objects.all()
@@ -210,18 +223,20 @@ def about(request):
     }
     return render(request, 'About/about.html', context)
 
+
 def profile(request, pk):
     try:
         user_profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
         # Create a new Profile object if it doesn't exist
         user_profile = Profile.objects.create(user=request.user)
-        user = User.objects.get(id = pk)
+        user = User.objects.get(id=pk)
     context = {
         # 'user': user,
         'user_profile': user_profile
     }
     return render(request, 'Profile/profile.html', context)
+
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -230,25 +245,27 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         # try:
         #     user = User.objects.get(username=username, password=password)
-            
+
         # except:
         #     messages.error(request, "User does not exist")
-        
+
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
             login(request, user)
             return redirect('index')
-        
+
         else:
-            messages.error(request, "Wrong Username or Password, please try again!")
+            messages.error(
+                request, "Wrong Username or Password, please try again!")
     context = {
-        
+
     }
     return render(request, 'Authenticate/login.html', context)
+
 
 def register(request):
     form = CustomUserCreationForm()
@@ -265,7 +282,8 @@ def register(request):
                 return redirect("register")
 
             if len(username) < 4:
-                messages.info(request, "Username must be at least 4 characters")
+                messages.info(
+                    request, "Username must be at least 4 characters")
                 return redirect("register")
             # Get the email from the form
             # Save the email or perform any necessary operations
@@ -278,8 +296,7 @@ def register(request):
             user.save()
             login(request, user)
 
-
-            #create a Profile model for the new user
+            # create a Profile model for the new user
             # user_model = User.objects.get(username=username)
             # new_profile = Profile.objects.create(
             #     user=user_model, id=user_model.id
@@ -287,17 +304,19 @@ def register(request):
             # new_profile.save()
             return redirect('index')
         else:
-            messages.error(request, 'An error occurred during registration, please try again!')
+            messages.error(
+                request, 'An error occurred during registration, please try again!')
             return redirect("register")
     return render(request, 'Authenticate/register.html', {'form': form, })
-
 
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-#Creating the contact form view
+# Creating the contact form view
+
+
 def contact_us(request):
     courses = Courses.objects.all()[0:5][::-1]
     products = Products.objects.all()[0:5][::-1]
@@ -309,7 +328,8 @@ def contact_us(request):
     form = ContactForm(request.POST or None)
     if form.is_valid():
         form.save()
-        messages.success(request, "Thank You, Your Message was submitted Successfully, we'll get back to you soon!")
+        messages.success(
+            request, "Thank You, Your Message was submitted Successfully, we'll get back to you soon!")
         return redirect('contact')
     context = {
         # 'user_profile': user_profile,
@@ -319,17 +339,20 @@ def contact_us(request):
     }
     return render(request, 'Contact/contact.html', context)
 
-#function to display terms and conditions when logging in !
+# function to display terms and conditions when logging in !
+
+
 def terms_conditions(request):
-     
-    #Creating a terms and conditions variable to loop throughall the terem
+
+    # Creating a terms and conditions variable to loop throughall the terem
     terms_condition = TermsModel.objects.all()
     context = {
         'terms_condition': terms_condition,
     }
     return render(request, 'Terms_Conditions/terms_conditions.html', context)
 
+
 def comments(request):
     user_profile = Profile.objects.all()
     comments = Comments.objects.all()
-    return render(request, 'Home/comments.html', { 'comments': comments, 'user_profile' : user_profile, })
+    return render(request, 'Home/comments.html', {'comments': comments, 'user_profile': user_profile, })
