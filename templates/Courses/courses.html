@@ -1,67 +1,274 @@
-{% extends "Navbar/navbar.html" %}
-{% load static %}
-<div>
-    {% block content %}
-    <style>
-        body {
-            background-color: #0F0F0F;
-        }
-    </style>
-    <div class="mt-5 container">
-        <div class="row mt-5 justify-content-center">
-        <center><h5 class="mt-5 text-light fw-bold" style="border-bottom: solid 1px #05694b;"><em>There are {{total}} Courses available. Check below!</em></h5></center>
+{% extends "Navbar/navbar.html" %} {% load static %} {% block content %}
+<style>
+  :root {
+    --dark-bg: #0f0f0f;
+    --primary-accent: #05694b;
+    --secondary-accent: #0a8a63;
+    --card-bg: #1a1a1a;
+    --text-light: #f8f9fa;
+    --text-muted: #6c757d;
+  }
 
-            {% for course in course_list %}
-            <div class="card mb-3 mx-2" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-5">
-                        <div class="card-body bg-success text-white">
-                            <h5 class="card-title fw-bold" style="font-size: 1.5em;">{{course.course_name}}</h5>
-                            <p class="fw-bold" style="color:#FFFFFF; font-size: 1.em;"><strong>Posted {{course.created | timesince}} Ago</strong></p>
-                            <p class="card-text" style="font-size:small; font-family:Verdana, Geneva, Tahoma, sans-serif; color: #e9e9e9;">
-                                {{ course.description|slice:":80" }}...
-                            </p>
-                            <p class="card-text"> <strong>Duration: 6 Weeks</strong> </p>
-                        </div>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <!--h5 class="card-title fw-bolder">
-                                Course Details
-                            </h5-->
-                            <p class="card-img"> 
-                                <img width="100%" style="height: 200px; border-radius: 10px;" class="" src="{{ course.course_img.url }}" alt="{{course.course_name}}">
-                                <center>
-                                    <span>
-                                        <span class="btn btn-success fw-bold mr-4" style="font-size: 1em; padding: 4px; color:#FFFFFF;"><strike> &dollar;{{course.old_price}}</strike></span>
-                                        <span class="btn btn-success fw-bold" style="font-size: 1em;  padding: 4px; color:#FFFFFF;">{{course.price}} &dollar;</span>
-                                    </span>
-                                </center>
-                            </p>
-                            <center><a href="{% url 'course' course.course_id %}" style="font-size: 13px;" class="card-text btn btn-primary">View and Enroll</a></center>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+  body {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
 
-        <!--Paginator-->
-        <div class="row justify-content-center text-center products mb-3">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo;First</a>
-                <a href="?page={{ page_obj.previous_page_number}}">previous</a>
-                {% endif %}
+  .course-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
 
-                <span class="current_page">Page{{page_obj.number }}</span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number}}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">Last&raquo;</a>
-                {% endif %}
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(5, 105, 75, 0.4);
+  }
 
-            </span>
-        </div>
+  .course-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .course-img {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .course-img-container:hover .course-img {
+    transform: scale(1.05);
+  }
+
+  .price-tag {
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 20px;
+    background: linear-gradient(
+      135deg,
+      var(--primary-accent),
+      var(--secondary-accent)
+    );
+  }
+
+  .old-price {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .pagination .page-link {
+    color: var(--primary-accent);
+    background-color: var(--card-bg);
+    border: 1px solid rgba(5, 105, 75, 0.3);
+  }
+
+  .pagination .page-item.active .page-link {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+  }
+
+  .section-title {
+    position: relative;
+    padding-bottom: 15px;
+  }
+
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-accent),
+      transparent
+    );
+  }
+
+  .course-meta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .enroll-btn {
+    background: linear-gradient(
+      135deg,
+      var(--primary-accent),
+      var(--secondary-accent)
+    );
+    border: none;
+    padding: 8px 25px;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .enroll-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(5, 105, 75, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .course-card {
+      max-width: 100% !important;
+    }
+  }
+</style>
+
+<div class="container py-5">
+  <!-- Hero Section -->
+  <div class="row mb-5">
+    <div class="col-12 text-center">
+      <h1 class="display-5 fw-bold mb-3">Expand Your Knowledge</h1>
+      <p class="lead">
+        Browse our collection of {{total}} expertly crafted courses
+      </p>
     </div>
-    {% endblock content %}
+  </div>
+
+  <!-- Filter/Search Bar (placeholder for future enhancement) -->
+  <div class="row mb-4 justify-content-center">
+    <div class="col-md-8">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control bg-dark text-light border-secondary"
+          placeholder="Search courses..."
+          aria-label="Search courses"
+        />
+        <button class="btn btn-outline-success" type="button">Search</button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#filterCollapse"
+        >
+          Filters <i class="bi bi-funnel"></i>
+        </button>
+      </div>
+
+      <!-- Filter Options (collapsed by default) -->
+      <div class="collapse mt-3" id="filterCollapse">
+        <div class="card card-body bg-dark">
+          <div class="row">
+            <div class="col-md-4">
+              <h6>Categories</h6>
+              <!-- Category filters would go here -->
+            </div>
+            <div class="col-md-4">
+              <h6>Price Range</h6>
+              <!-- Price filters would go here -->
+            </div>
+            <div class="col-md-4">
+              <h6>Duration</h6>
+              <!-- Duration filters would go here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Grid -->
+  <div class="row justify-content-center g-4">
+    {% for course in course_list %}
+    <div class="col-xl-4 col-lg-6 col-md-8">
+      <div class="course-card h-100">
+        <div
+          class="position-relative course-img-container"
+          style="height: 200px; overflow: hidden"
+        >
+          <img
+            src="{{ course.course_img.url }}"
+            class="course-img w-100 h-100"
+            alt="{{course.course_name}}"
+          />
+          <span class="course-badge text-white">New</span>
+        </div>
+
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title fw-bold mb-0">{{course.course_name}}</h5>
+            <div class="d-flex">
+              <span class="badge bg-success me-1">Popular</span>
+              <span class="badge bg-info">6 Weeks</span>
+            </div>
+          </div>
+
+          <p class="course-meta mb-2">
+            <i class="bi bi-clock"></i> Posted {{course.created|timesince}} ago
+            <span class="mx-2">|</span>
+            <i class="bi bi-people"></i> 245 students
+          </p>
+
+          <p class="card-text mb-3">{{ course.description|slice:":120" }}...</p>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="old-price text-muted me-2"
+                >${{course.old_price}}</span
+              >
+              <span class="price-tag text-white">${{course.price}}</span>
+            </div>
+            <a
+              href="{% url 'course' course.course_id %}"
+              class="enroll-btn btn btn-success"
+            >
+              Enroll Now <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
 </div>
+
+<!-- Bootstrap Icons -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
+/>
+
+<!-- Optional: Add animations when scrolling into view -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const courseCards = document.querySelectorAll(".course-card");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    courseCards.forEach((card, index) => {
+      card.style.opacity = 0;
+      card.style.transform = "translateY(20px)";
+      card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+      observer.observe(card);
+    });
+  });
+</script>
+{% endblock content %}
